@@ -9,6 +9,7 @@
 
 <body>
 	<input type="file" id="file-input">
+	<button id="btn-demo">Demo</button>
 	<script>
 		const cueFile1 = `REM GENRE R&B
 REM DATE 2016
@@ -62,9 +63,10 @@ FILE "Michael Kiwanuka - Love And Hate.flac" WAVE
 	INDEX 01 50:08:23
 `;
 
+		document.getElementById("btn-demo").addEventListener("click", async function () {
+			parseCueContent(cueFile1);
+		});
 
-
-		
 		async function parseCueContent(cueContent) {
 	        const data = await fetch("./better-cue-parser.0.3.1.min.js");
 			const jsCode = await data.text();
@@ -76,8 +78,6 @@ FILE "Michael Kiwanuka - Love And Hate.flac" WAVE
 				});
 			}
 		}
-
-		
 		
 		const fileInputElement = document.getElementById("file-input");
 		fileInputElement.addEventListener("change", async function () {
@@ -100,7 +100,6 @@ FILE "Michael Kiwanuka - Love And Hate.flac" WAVE
 			}));
 
 			cueContent(textList[0]);
-
 			
 		}, false);
 	</script>
