@@ -58,20 +58,77 @@ FILE "Michael Kiwanuka - Love And Hate.flac" WAVE
     INDEX 00 50:06:41
     INDEX 01 50:08:23
 `;
-      (async () => {
-        fetch("./better-cue-parser.0.3.1.min.js")
-        .then(data => data.text())
-        .then(async jsCode => {
-          eval(jsCode); // imagejs is declared
-          if (!!betterCueParser) {
-			const cueSheet = betterCueParser.parse(cueFile1);
-			cueSheet.files[0].tracks.forEach(track => {
-				console.log(`${track.title} ${track.indexes.map(index => JSON.stringify(index.time)).join(",")} `);
-			})
-			debugger;
-          }
-        })
-      })();
+
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+	<input type="file" id="file-input">
+	<script>
+		async function parseCueContent(cueContent) {
+	        const data = await fetch("./better-cue-parser.0.3.1.min.js");
+			const jsCode = await data.text();
+			eval(jsCode); // imagejs is declared
+			if (!!betterCueParser) {
+				const cueSheet = betterCueParser.parse(cueContent);
+				cueSheet.files[0].tracks.forEach(track => {
+					console.log(`${track.title} ${track.indexes.map(index => JSON.stringify(index.time)).join(",")} `);
+				});
+			}
+		}
+
+		
+		
+		const fileInputElement = document.getElementById("file-input");
+		fileInputElement.addEventListener("change", async function () {
+			const fileList = Array
+				.from(this.files);
+			
+			if (filesList.length > 1) {
+				throw "Only 1 file"
+			}
+			
+			const textList = await Promise.all(fileList.map(file => {
+				return new Promise((res) => {
+					const reader = new FileReader();
+						reader.onload = (event) => {
+						res(event.target.result);
+					}
+					
+					reader.readAsText(file);
+				});
+			}));
+
+			cueContent(textList[0]);
+
+			
+		}, false);
+	</script>
+</body>
+</html>
+
+
+
+
+
+
+
